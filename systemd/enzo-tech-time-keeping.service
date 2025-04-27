@@ -1,0 +1,14 @@
+[Unit]
+Description=Enzo Tech Time Keeping Server
+After=network-online.target enzo-tech-webserver.service
+Requires=network-online.target enzo-tech-webserver.service
+
+[Service]
+Environment=HOME=/home/lleonardo
+WorkingDirectory=/home/lleonardo/bin/enzo-tech-time-keeping
+ExecStart=/home/lleonardo/bin/enzo-tech-webserver/enzo-tech-time-keeping
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
