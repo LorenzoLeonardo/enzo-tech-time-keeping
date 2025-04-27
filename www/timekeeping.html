@@ -30,8 +30,7 @@
                 <div class="name-filter">
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" placeholder="Enter name">
-                    <button id="filter"
-                        onclick="filterEntries(event, {{ current_page }}, '{{ user_id }}', {{ is_admin }})">Filter It
+                    <button id="filter" onclick="filterEntries(event, {{ current_page }})">Filter It
                         Now</button>
                 </div>
             </div>
@@ -78,20 +77,18 @@
             <!-- Pagination now included in right panel -->
             <div class="pagination" style="margin-top: 15px;">
                 <button id="prevPage"
-                    onclick="changePage({{ prev_page }}, '{{ name }}', '{{ start_date }}', '{{ end_date }}', {{ is_admin }}, '{{ user_id }}')"
-                    {% if current_page==1 %}disabled{% endif %}>Previous</button>
+                    onclick="changePage({{ prev_page }}, '{{ name }}', '{{ start_date }}', '{{ end_date }}')" {% if
+                    current_page==1 %}disabled{% endif %}>Previous</button>
                 <span>Page {{ current_page }}</span>
                 <button id="nextPage"
-                    onclick="changePage({{ next_page }}, '{{ name }}', '{{ start_date }}', '{{ end_date }}', {{ is_admin }}, '{{ user_id }}')"
-                    {% if current_page>= total_pages %}disabled{% endif %}>Next</button>
+                    onclick="changePage({{ next_page }}, '{{ name }}', '{{ start_date }}', '{{ end_date }}')" {% if
+                    current_page>= total_pages %}disabled{% endif %}>Next</button>
             </div>
         </div>
     </div>
     <script>
         function changePage(page, name, start_date, end_date, is_admin, user_id) {
             const params = new URLSearchParams({ page });
-            params.append("user_id", user_id);
-            params.append("is_admin", String(is_admin));
 
             if (is_admin) {
                 const filtersAreValid = (
@@ -110,7 +107,7 @@
             window.location.href = `/external/timekeeping?${params.toString()}`;
         }
         {% if is_admin %}
-        function filterEntries(event, page, user_id, is_admin) {
+        function filterEntries(event, page) {
             event.preventDefault();
 
             const startDate = document.getElementById("start").value;
@@ -122,8 +119,8 @@
                 localStorage.removeItem("name");
                 localStorage.removeItem("startDate");
                 localStorage.removeItem("endDate");
-                let str_admin = String(is_admin);
-                window.location.href = `/external/timekeeping?page=${page}&user_id=${user_id}&is_admin=${str_admin})`;
+
+                window.location.href = `/external/timekeeping?page=${page}`;
                 return;
             }
 
@@ -136,8 +133,8 @@
             localStorage.setItem("name", name);
             localStorage.setItem("startDate", startDate);
             localStorage.setItem("endDate", endDate);
-            let str_admin = String(is_admin);
-            window.location.href = `/external/timekeeping?page=${page}&name=${name}&start_date=${startDaterfc3339}&end_date=${endDaterfc3339}&user_id=${user_id}&is_admin=${str_admin}`;
+
+            window.location.href = `/external/timekeeping?page=${page}&name=${name}&start_date=${startDaterfc3339}&end_date=${endDaterfc3339}`;
         }
         window.addEventListener('DOMContentLoaded', () => {
             const nameInput = document.getElementById("name");
