@@ -1,0 +1,22 @@
+[package]
+name = "enzo-tech-time-keeping"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+async-trait = "0.1"
+axum = {version = "0.8", features = ["macros"]}
+axum-server = { version = "0.7", features = ["tls-rustls"] }
+chrono = "0.4"
+fern = "0.7"
+log = "0.4"
+serde = "1.0"
+serde_json = "1.0"
+sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio"] }
+strum = "0.27"
+strum_macros = "0.27"
+tera = "1.20"
+tokio = { version = "1.44", features = ["full"] }
+tokio-util = "0.7"
+tower-cookies = "0.11"
+url = "2.5"
