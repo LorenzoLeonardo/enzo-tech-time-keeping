@@ -55,8 +55,11 @@ async fn main() {
 
 async fn http_server(db: Db) {
     let app = Router::new()
-        .route("/css/{*file}", get(serve_css))
-        .route("/", get(timekeeping::handle_timekeeping))
+        .route("/external/timekeeping/css/{*file}", get(serve_css))
+        .route(
+            "/external/timekeeping",
+            get(timekeeping::handle_timekeeping),
+        )
         .layer(Extension(db));
 
     let addr = SocketAddr::from_str(DEFAULT_SERVER_ADDRESS).unwrap();
