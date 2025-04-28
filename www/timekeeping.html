@@ -5,10 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Time Keeping Viewer</title>
-    <link rel="stylesheet" href="/external/timekeeping/css/timekeeping.css">
+    <link rel="stylesheet" href="/css/timekeeping.css">
 </head>
 
 <body>
+    <div id="header"></div>
+    <script>
+        let currentPath = window.location.pathname;
+        fetch(`/header?path=${encodeURIComponent(currentPath)}`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("header").innerHTML = data;
+            });
+    </script>
     <div class="container" style="padding: 20px 0;">
         <h1 style="color:#0d47a1; text-align: center;">My Timekeeping Viewer</h1>
     </div>
@@ -30,8 +39,7 @@
                 <div class="name-filter">
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" placeholder="Enter name">
-                    <button id="filter" onclick="filterEntries(event, {{ current_page }})">Filter It
-                        Now</button>
+                    <button id="filter" onclick="filterEntries(event, {{ current_page }})">Filter It Now</button>
                 </div>
             </div>
         </div>
@@ -77,17 +85,25 @@
             <!-- Pagination now included in right panel -->
             <div class="pagination" style="margin-top: 15px;">
                 <button id="prevPage"
-                    onclick="changePage({{ prev_page }}, '{{ name }}', '{{ start_date }}', '{{ end_date }}')" {% if
-                    current_page==1 %}disabled{% endif %}>Previous</button>
+                    onclick="changePage({{ prev_page }}, '{{ name }}', '{{ start_date }}', '{{ end_date }}', {{ is_admin }})"
+                    {% if current_page==1 %}disabled{% endif %}>Previous</button>
                 <span>Page {{ current_page }}</span>
                 <button id="nextPage"
-                    onclick="changePage({{ next_page }}, '{{ name }}', '{{ start_date }}', '{{ end_date }}')" {% if
-                    current_page>= total_pages %}disabled{% endif %}>Next</button>
+                    onclick="changePage({{ next_page }}, '{{ name }}', '{{ start_date }}', '{{ end_date }}', {{ is_admin }})"
+                    {% if current_page>= total_pages %}disabled{% endif %}>Next</button>
             </div>
         </div>
     </div>
+    <div id="footer"></div>
     <script>
-        function changePage(page, name, start_date, end_date, is_admin, user_id) {
+        fetch('/footer')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("footer").innerHTML = data;
+            });
+    </script>
+    <script>
+        function changePage(page, name, start_date, end_date, is_admin) {
             const params = new URLSearchParams({ page });
 
             if (is_admin) {
@@ -119,7 +135,6 @@
                 localStorage.removeItem("name");
                 localStorage.removeItem("startDate");
                 localStorage.removeItem("endDate");
-
                 window.location.href = `/external/timekeeping?page=${page}`;
                 return;
             }
