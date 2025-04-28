@@ -71,6 +71,7 @@ async fn http_server(db: Db) {
 }
 
 async fn serve_css(AxumPath(file): AxumPath<String>) -> impl IntoResponse {
+    log::info!("Serving CSS file: {}", file);
     let mut path = PathBuf::from("css");
     path.push(&file);
 
